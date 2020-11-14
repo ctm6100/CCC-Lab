@@ -1,5 +1,4 @@
-# Serial function
-### Serial Registor Confing
+# Serial Registor Confing
 #### Config TX RX Pin
 ##### TX(UArt0) pin enable\ disable
 TX(UArt0) pin enable
