@@ -63,12 +63,34 @@ void UDRECompInterruptDisable(){
 # UArt Function
 ### Polling
 #### UArt Send Polling
+the **CHAR** you will wanan send
 ```C++
 void UArtSendPolling(unsigned char inp)
 ```
 #### UArt Receive Polling
-the Receive CHAR will return in this function
+the Receive **CHAR** will return in this function
 ```C++
 char UArtReceivePolling(void)
 ```
+---
+### Interrupt
+#### UArt Send Once
+get it a String(**char array pointer** e.g. char *someString ="example")
+it will auto enable UDRE Interrupt 
+after it send the **whole String** send the **UDRE Interrupt will auto disable**
+```C++
+void UArtSendInterruptOnce(char *inp){
+}
+```
+
+#### UArt Send 
+get it a String(**char array pointer** e.g. char *someString ="example" <-- this better be a gobal variable)
+it will auto enable UDRE Interrupt 
+after it send the **whole String** send the **UDRE Interrupt reset and resend the string (looop....**
+**UDRE Interrupt will NOT auto disable, stop it using UDRECompInterruptDisable()**
+```C++
+void UArtSendInterrupt(char *inp){
+}
+```
+
 ---
