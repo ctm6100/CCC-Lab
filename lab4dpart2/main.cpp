@@ -109,13 +109,15 @@ void RXCompInterruptDisable(){
 	UCSR0B &= ~(1 << RXCIE0);
 }
 
+//use UDRE-------------------
 void TXCompInterruptEnable(){
 	UCSR0B |= (1 << TXCIE0);
 }
-
+//use UDRE-------------------
 void TXCompInterruptDisable(){
 	UCSR0B &= ~(1 << TXCIE0);
 }
+//use UDRE-------------------
 
 void UDRECompInterruptEnable(){
 	UCSR0B |= (1 << UDRIE0);
@@ -127,7 +129,7 @@ void UDRECompInterruptDisable(){
 
 void UArtSendPolling(unsigned char inp){
 	while ( !(UCSR0A & (1<<UDRE0)) ){ //0000 & 0010 = 0000(->!false) , 0010 and 0010 = 0010(->!true
-	}//Wait for data to be received
+	}//Wait for UDR empty i.e. ready to send
 	UDR0 = inp;
 }
 
@@ -138,11 +140,14 @@ char UArtReceivePolling(void){
 }
 
 
-
+//defaut string does no matter
 char *UartSend = "We Are Ready!";
-int TX_i= 0;
-
+//TX_i store the number of Char still need to send
+int TX_i= 0; 
+//TXonce determine wheather it send once or keep sending, 
+//i.e. TXonce is true send once time the string(char arry pointer) then disable the send interrupt(UDRE)
 bool TXonce= false;
+
 void UArtSendInterrupt(char *inp){
 	TX_i= strlen(inp);
 	UartSend = inp;
@@ -158,8 +163,10 @@ void UArtSendInterruptOnce(char *inp){
 }
 
 //bool isUartSend = false;
+//ISR USART_UDRE_vect is petty well define, use UArtSendInterrupt() and UArtSendInterruptOnce() la
 ISR(USART_UDRE_vect){
-	if (TX_i !=0){
+	if (TX_i >=0){
+		//send the current char
 		UDR0 = UartSend[strlen(UartSend) - (TX_i--)];
 	}else{
 		if (TXonce){
@@ -178,11 +185,16 @@ char *sentChar ="a";
 
 bool isUartReceive= false;
 char UartReceive;
-char UartLastReceive;
-int RX_stat=0;
-char *temp = "";
+char UartLastReceive;//lab4 only stuff
+int RX_stat=0;//lab4 only stuff
+char *temp = "";//lab4 only stuff
 ISR(USART_RX_vect){
+	//copy the input char to UartReceive
 	UartReceive = UDR0;
+	
+	//lab4 only stuff
+	//do the stuff you want to do here---------------
+	//p.s. keep it short
 	if (RX_stat == 0){
 		UDRECompInterruptDisable();
 		temp = "1234567890";
