@@ -92,5 +92,10 @@ after it send the **whole String** send the **UDRE Interrupt reset and resend th
 void UArtSendInterrupt(char *inp){
 }
 ```
-
+#### UArt RX
+make good use of 
+```C++
+RXCompInterruptEnable();
+ISR(USART_RX_vect){
+}
 ---
